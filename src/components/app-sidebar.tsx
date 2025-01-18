@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import info from "@/lib/info.json";
 import {
     Sidebar,
     SidebarContent,
@@ -7,7 +6,6 @@ import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
-    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -16,7 +14,7 @@ import {
 import { apiClient } from "@/lib/api";
 import { NavLink, useLocation } from "react-router";
 import { type UUID } from "@elizaos/core";
-import { Book, Cog, User } from "lucide-react";
+import { User } from "lucide-react";
 import ConnectionStatus from "./connection-status";
 
 export function AppSidebar() {
@@ -31,29 +29,6 @@ export function AppSidebar() {
 
     return (
         <Sidebar>
-            <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <NavLink to="/">
-                                <img
-                                    src="/elizaos-icon.png"
-                                    width="100%"
-                                    height="100%"
-                                    className="size-7"
-                                />
-
-                                <div className="flex flex-col gap-0.5 leading-none">
-                                    <span className="font-semibold">
-                                        ElizaOS
-                                    </span>
-                                    <span className="">v{info?.version}</span>
-                                </div>
-                            </NavLink>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>Agents</SidebarGroupLabel>
@@ -99,21 +74,6 @@ export function AppSidebar() {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
-                    <SidebarMenuItem>
-                        <NavLink
-                            to="https://elizaos.github.io/eliza/docs/intro/"
-                            target="_blank"
-                        >
-                            <SidebarMenuButton>
-                                <Book /> Documentation
-                            </SidebarMenuButton>
-                        </NavLink>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton disabled>
-                            <Cog /> Settings
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
                     <ConnectionStatus />
                 </SidebarMenu>
             </SidebarFooter>
