@@ -7,21 +7,18 @@ import {
 import { ChatInput } from "@/components/ui/chat/chat-input";
 import { ChatMessageList } from "@/components/ui/chat/chat-message-list";
 import { useTransition, animated } from "@react-spring/web";
-import { Paperclip, Send, X } from "lucide-react";
+import { Send, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Content, UUID } from "@elizaos/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api";
 import { cn, moment } from "@/lib/utils";
 import { Avatar, AvatarImage } from "./ui/avatar";
-import CopyButton from "./copy-button";
-import ChatTtsButton from "./ui/chat/chat-tts-button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import AIWriter from "react-aiwriter";
 import { IAttachment } from "@/types";
-import { AudioRecorder } from "./audio-recorder";
 import { Badge } from "./ui/badge";
+import ConnectionStatus from "./connection-status";
 
 interface ExtraContentFields {
     user: string;
@@ -37,7 +34,6 @@ export default function Page({ agentId }: { agentId: UUID }) {
     const [input, setInput] = useState("");
     const messagesContainerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
 
     const queryClient = useQueryClient();
@@ -145,13 +141,6 @@ export default function Page({ agentId }: { agentId: UUID }) {
         },
     });
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file && file.type.startsWith("image/")) {
-            setSelectedFile(file);
-        }
-    };
-
     const messages =
         queryClient.getQueryData<ContentWithUser[]>(["messages", agentId]) ||
         [];
@@ -182,7 +171,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
                                 >
                                     {message?.user !== "user" ? (
                                         <Avatar className="size-8 p-1 border rounded-full select-none">
-                                            <AvatarImage src="/elizaos-icon.png" />
+                                            <AvatarImage src="/unicorn.svg" />
                                         </Avatar>
                                     ) : null}
                                     <div className="flex flex-col">
@@ -222,18 +211,6 @@ export default function Page({ agentId }: { agentId: UUID }) {
                                             </div>
                                         </ChatBubbleMessage>
                                         <div className="flex items-center gap-4 justify-between w-full mt-1">
-                                            {message?.text &&
-                                            !message?.isLoading ? (
-                                                <div className="flex items-center gap-1">
-                                                    <CopyButton
-                                                        text={message?.text}
-                                                    />
-                                                    <ChatTtsButton
-                                                        agentId={agentId}
-                                                        text={message?.text}
-                                                    />
-                                                </div>
-                                            ) : null}
                                             <div
                                                 className={cn([
                                                     message?.isLoading
@@ -303,40 +280,9 @@ export default function Page({ agentId }: { agentId: UUID }) {
                         className="min-h-12 resize-none rounded-md bg-card border-0 p-3 shadow-none focus-visible:ring-0"
                     />
                     <div className="flex items-center p-3 pt-0">
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <div>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() => {
-                                            if (fileInputRef.current) {
-                                                fileInputRef.current.click();
-                                            }
-                                        }}
-                                    >
-                                        <Paperclip className="size-4" />
-                                        <span className="sr-only">
-                                            Attach file
-                                        </span>
-                                    </Button>
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        onChange={handleFileChange}
-                                        accept="image/*"
-                                        className="hidden"
-                                    />
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent side="left">
-                                <p>Attach file</p>
-                            </TooltipContent>
-                        </Tooltip>
-                        <AudioRecorder
-                            agentId={agentId}
-                            onChange={(newInput: string) => setInput(newInput)}
-                        />
+                        <div className="pl-2">
+                            <ConnectionStatus />
+                        </div>
                         <Button
                             disabled={!input || sendMessageMutation?.isPending}
                             type="submit"

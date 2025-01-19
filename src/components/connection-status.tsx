@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api";
 import { useState } from "react";
@@ -27,51 +26,47 @@ export default function ConnectionStatus() {
     const isLoading = query?.isRefetching || query?.isPending;
 
     return (
-        <SidebarMenuItem>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <SidebarMenuButton>
-                        <div className="flex flex-col gap-1 select-none transition-all duration-200">
-                            <div className="flex items-center gap-1">
-                                <div
-                                    className={cn([
-                                        "h-2.5 w-2.5 rounded-full",
-                                        isLoading
-                                            ? "bg-muted-foreground"
-                                            : connected
-                                              ? "bg-green-600"
-                                              : "bg-red-600",
-                                    ])}
-                                />
-                                <span
-                                    className={cn([
-                                        "text-xs",
-                                        isLoading
-                                            ? "text-muted-foreground"
-                                            : connected
-                                              ? "text-green-600"
-                                              : "text-red-600",
-                                    ])}
-                                >
-                                    {isLoading
-                                        ? "Connecting..."
-                                        : connected
-                                          ? "Connected"
-                                          : "Disconnected"}
-                                </span>
-                            </div>
-                        </div>
-                    </SidebarMenuButton>
-                </TooltipTrigger>
-                {connected ? (
-                    <TooltipContent side="top">
-                        <div className="flex items-center gap-1">
-                            <Activity className="size-4" />
-                            <span>{queryTime?.toFixed(2)} ms</span>
-                        </div>
-                    </TooltipContent>
-                ) : null}
-            </Tooltip>
-        </SidebarMenuItem>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <div className="flex flex-col gap-1 select-none transition-all duration-200">
+                    <div className="flex items-center gap-1">
+                        <div
+                            className={cn([
+                                "h-2.5 w-2.5 rounded-full",
+                                isLoading
+                                    ? "bg-muted-foreground"
+                                    : connected
+                                    ? "bg-green-600"
+                                    : "bg-red-600",
+                            ])}
+                        />
+                        <span
+                            className={cn([
+                                "text-xs",
+                                isLoading
+                                    ? "text-muted-foreground"
+                                    : connected
+                                    ? "text-green-600"
+                                    : "text-red-600",
+                            ])}
+                            >
+                            {isLoading
+                                ? "Connecting..."
+                                : connected
+                                ? "Connected"
+                                : "Disconnected"}
+                        </span>
+                    </div>
+                </div>
+            </TooltipTrigger>
+            {connected ? (
+                <TooltipContent side="top">
+                    <div className="flex items-center gap-1">
+                        <Activity className="size-4" />
+                        <span>{queryTime?.toFixed(2)} ms</span>
+                    </div>
+                </TooltipContent>
+            ) : null}
+        </Tooltip>
     );
 }
