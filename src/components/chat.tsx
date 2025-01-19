@@ -157,70 +157,72 @@ export default function Page({ agentId }: { agentId: UUID }) {
         <div className="flex flex-col w-full h-[calc(100dvh)] sm:p-4">
             <div className="flex-1 overflow-y-auto">
                 <ChatMessageList ref={messagesContainerRef}>
-                    {transitions((styles, message) => {
-                        const variant = getMessageVariant(message?.user);
-                        return (
-                            // @ts-expect-error
-                            <animated.div
-                                style={styles}
-                                className="flex flex-col gap-1 p-2 sm:gap-2 sm:p-4"
+                    {transitions((style, message) => (
+                        // @ts-ignore
+                        <animated.div
+                            style={style}
+                            className="flex flex-col gap-1 p-2 sm:gap-2 sm:p-4"
+                        >
+                            <ChatBubble
+                                variant={getMessageVariant(message?.user)}
+                                className={cn(
+                                    "flex flex-row items-center gap-1 sm:gap-2",
+                                    message?.user === "user"
+                                        ? "ml-auto max-w-[85%] sm:max-w-[75%] [&>div]:rounded-tl-lg [&>div]:rounded-tr-lg [&>div]:rounded-bl-lg [&>div]:rounded-br-none"
+                                        : "mr-auto max-w-[85%] sm:max-w-[75%] [&>div]:rounded-tl-lg [&>div]:rounded-tr-lg [&>div]:rounded-bl-none [&>div]:rounded-br-lg"
+                                )}
                             >
-                                <ChatBubble
-                                    variant={variant}
-                                    className={cn(
-                                        "flex flex-row items-center gap-1 sm:gap-2",
-                                        message?.user === "user"
-                                            ? "ml-auto max-w-[85%] sm:max-w-[75%]"
-                                            : "mr-auto max-w-[85%] sm:max-w-[75%]"
-                                    )}
-                                >
-                                    {message?.user !== "user" ? (
-                                        <Avatar className="size-6 sm:size-8 border rounded-full select-none">
-                                            <AvatarImage src="/unicorn.svg" />
-                                        </Avatar>
-                                    ) : null}
-                                    <div className="flex flex-col w-full">
-                                        <ChatBubbleMessage
-                                            isLoading={message?.isLoading}
-                                            className="text-sm sm:text-base"
+                                {message?.user !== "user" ? (
+                                    <Avatar className="size-6 sm:size-8 border rounded-full select-none">
+                                        <AvatarImage src="/unicorn.svg" />
+                                    </Avatar>
+                                ) : null}
+                                <div className="flex flex-col w-full">
+                                    <ChatBubbleMessage
+                                        isLoading={message?.isLoading}
+                                        className={cn(
+                                            "text-sm sm:text-base",
+                                            message?.user === "user"
+                                                ? "rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-none"
+                                                : "rounded-tl-lg rounded-tr-lg rounded-bl-none rounded-br-lg"
+                                        )}
+                                    >
+                                        {message?.user !== "user" ? (
+                                            <AIWriter>
+                                                {message?.text}
+                                            </AIWriter>
+                                        ) : (
+                                            message?.text
+                                        )}
+                                    </ChatBubbleMessage>
+                                    <div className={cn(
+                                        "flex items-center gap-4 w-full mt-1",
+                                        message?.user === "user" ? "justify-end" : "justify-start"
+                                    )}>
+                                        <div
+                                            className={cn([
+                                                message?.isLoading ? "mt-2" : "",
+                                                "flex items-center gap-2 sm:gap-4 select-none",
+                                                message?.user === "user" ? "flex-row-reverse" : "flex-row"
+                                            ])}
                                         >
-                                            {message?.user !== "user" ? (
-                                                <AIWriter>
-                                                    {message?.text}
-                                                </AIWriter>
-                                            ) : (
-                                                message?.text
-                                            )}
-                                        </ChatBubbleMessage>
-                                        <div className={cn(
-                                            "flex items-center gap-4 w-full mt-1",
-                                            message?.user === "user" ? "justify-end" : "justify-start"
-                                        )}>
-                                            <div
-                                                className={cn([
-                                                    message?.isLoading ? "mt-2" : "",
-                                                    "flex items-center gap-2 sm:gap-4 select-none",
-                                                    message?.user === "user" ? "flex-row-reverse" : "flex-row"
-                                                ])}
-                                            >
-                                                {message?.source ? (
-                                                    <Badge variant="outline" className="text-xs">
-                                                        {message.source}
-                                                    </Badge>
-                                                ) : null}
-                                                {message?.createdAt ? (
-                                                    <ChatBubbleTimestamp
-                                                        timestamp={moment(message?.createdAt).format("LT")}
-                                                        className="text-xs"
-                                                    />
-                                                ) : null}
-                                            </div>
+                                            {message?.source ? (
+                                                <Badge variant="outline" className="text-xs">
+                                                    {message.source}
+                                                </Badge>
+                                            ) : null}
+                                            {message?.createdAt ? (
+                                                <ChatBubbleTimestamp
+                                                    timestamp={moment(message?.createdAt).format("LT")}
+                                                    className="text-xs"
+                                                />
+                                            ) : null}
                                         </div>
                                     </div>
-                                </ChatBubble>
-                            </animated.div>
-                        );
-                    })}
+                                </div>
+                            </ChatBubble>
+                        </animated.div>
+                    ))}
                 </ChatMessageList>
             </div>
             <div className="px-4 pb-4">
