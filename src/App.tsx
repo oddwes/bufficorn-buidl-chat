@@ -5,7 +5,9 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { Toaster } from "./components/ui/toaster";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Chat from "./routes/chat";
+import Login from "./routes/login";
 import useVersion from "./hooks/use-version";
+import ProtectedRoute from "./components/protected-route";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -31,7 +33,15 @@ function App() {
                             <SidebarInset>
                                 <div className="flex flex-1 flex-col gap-4 size-full container">
                                     <Routes>
-                                        <Route path="/" element={<Chat />} />
+                                        <Route path="/login" element={<Login />} />
+                                        <Route
+                                            path="/"
+                                            element={
+                                                <ProtectedRoute>
+                                                    <Chat />
+                                                </ProtectedRoute>
+                                            }
+                                        />
                                     </Routes>
                                 </div>
                             </SidebarInset>
