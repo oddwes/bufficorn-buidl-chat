@@ -224,11 +224,6 @@ export default function Page({ agentId }: { agentId: UUID }) {
                                                         {message.source}
                                                     </Badge>
                                                 ) : null}
-                                                {message?.action ? (
-                                                    <Badge variant="outline">
-                                                        {message.action}
-                                                    </Badge>
-                                                ) : null}
                                                 {message?.createdAt ? (
                                                     <ChatBubbleTimestamp
                                                         timestamp={moment(
