@@ -28,14 +28,15 @@
         "clsx": "2.1.1",
         "dayjs": "^1.11.13",
         "lucide-react": "^0.469.0",
-        "react": "^19.0.0",
+        "react": "^18.2.0",
         "react-aiwriter": "^1.0.0",
-        "react-dom": "^19.0.0",
+        "react-dom": "^18.2.0",
         "react-router": "^7.1.1",
         "react-router-dom": "^7.1.1",
         "semver": "^7.6.3",
         "tailwind-merge": "^2.6.0",
         "tailwindcss-animate": "^1.0.7",
+        "thirdweb": "^5.85.0",
         "vite-plugin-compression": "^0.5.1"
     },
     "devDependencies": {
@@ -63,5 +64,6 @@
         "typescript-eslint": "^8.18.2",
         "vite": "^6.0.5",
         "vite-tsconfig-paths": "^5.1.4"
-    }
+    },
+    "packageManager": "pnpm@10.0.0+sha512.b8fef5494bd3fe4cbd4edabd0745df2ee5be3e4b0b8b08fa643aa3e4c6702ccc0f00d68fa8a8c9858a735a0032485a44990ed2810526c875e416f001b17df12b"
 }
