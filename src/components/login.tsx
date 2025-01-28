@@ -37,7 +37,8 @@ const LoginPage: React.FC = () => {
               <br />Assistant
             </h1>
             <p className="text-gray-300 mb-8">
-              Agent for any member in a community using Unicorn to ask and interact with their account and wallet.
+            Bridget is your personal AI agent here to answer questions about the event, your account and wallet.
+            Begin by logging in with your username you chose at sign up.
             </p>
 
             <div className="flex gap-2 mb-4">
