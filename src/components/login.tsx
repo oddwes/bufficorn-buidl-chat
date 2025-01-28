@@ -46,7 +46,7 @@ const LoginPage: React.FC = () => {
                 value={url}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="myens.ethdenver.com"
+                placeholder="username.ethdenver.com"
                 className="flex-1 px-4 py-2 rounded-full bg-white text-gray-800"
               />
               <button
