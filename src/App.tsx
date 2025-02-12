@@ -6,7 +6,6 @@ import { Toaster } from "./components/ui/toaster";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Chat from "./routes/chat";
 import Login from "./routes/login";
-import useVersion from "./hooks/use-version";
 import ProtectedRoute from "./components/protected-route";
 
 const queryClient = new QueryClient({
@@ -18,7 +17,6 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-    useVersion();
     return (
         <QueryClientProvider client={queryClient}>
             <div
