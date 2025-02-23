@@ -173,7 +173,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
               >
                 {message?.user !== "user" ? (
                   <Avatar className="size-6 sm:size-8 border rounded-full select-none">
-                    <AvatarImage src="/unicorn.svg" />
+                    <AvatarImage src="/bufficorn.png" />
                   </Avatar>
                 ) : null}
                 <div className="flex flex-col w-full">

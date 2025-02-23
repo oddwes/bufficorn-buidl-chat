@@ -44,7 +44,7 @@ const LoginPage: React.FC = () => {
 
           <div className="w-64">
             <img
-              src="/unicorn.svg"
+              src="/bufficorn.png"
               alt="Unicorn Ethereum Logo"
               className="w-full h-full object-contain"
             />
