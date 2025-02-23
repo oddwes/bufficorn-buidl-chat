@@ -35,7 +35,7 @@
         "semver": "^7.6.3",
         "tailwind-merge": "^2.6.0",
         "tailwindcss-animate": "^1.0.7",
-        "thirdweb": "^5.85.0",
+        "thirdweb": "^5.88.7",
         "vite-plugin-compression": "^0.5.1"
     },
     "devDependencies": {
