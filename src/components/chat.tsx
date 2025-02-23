@@ -226,7 +226,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
           ))}
         </ChatMessageList>
       </div>
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-4 max-w-3xl mx-auto w-full">
         <form
           ref={formRef}
           onSubmit={handleSendMessage}
