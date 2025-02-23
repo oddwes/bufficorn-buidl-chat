@@ -1,31 +1,11 @@
-import React, { useState } from 'react';
-import { isValidENSName } from "thirdweb/utils";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
-  const [url, setUrl] = useState<string>('');
-  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
-  const cardStyle = "aspect-square bg-gray-800 p-6 rounded-lg flex items-center justify-center text-center";
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isValidENSName(url)) {
-      setError("Invalid ENS");
-      return;
-    }
-    setError("");
-    // Store ENS in session storage
-    sessionStorage.setItem("ens", url);
-    navigate("/");
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSubmit(e);
-    }
-  };
+  const cardStyle =
+    "aspect-square bg-gray-800 p-6 rounded-lg flex items-center justify-center text-center";
 
   return (
     <div className="min-h-screen text-white p-8 flex items-center">
@@ -34,33 +14,23 @@ const LoginPage: React.FC = () => {
           <div className="max-w-xl">
             <h1 className="text-4xl font-bold mb-4">
               Your personal <span className="text-purple-500">ETHDenver</span>
-              <br />Assistant
+              <br />
+              Assistant
             </h1>
             <p className="text-gray-300 mb-8">
-            Bridget is your personal AI agent here to answer questions about the event, your account and wallet.
-            Begin by logging in with your username you chose at sign up.
+              Bridget is your personal AI agent here to answer questions about
+              the event, your account and wallet. Begin by logging in with your
+              username you chose at sign up.
             </p>
 
             <div className="flex gap-2 mb-4">
-              <input
-                type="text"
-                value={url}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="username.ethdenver.com"
-                className="flex-1 px-4 py-2 rounded-full bg-white text-gray-800"
-              />
               <button
-                onClick={handleSubmit}
+                onClick={() => navigate("/chat")}
                 className="px-6 py-2 bg-blue-600 rounded-full font-medium"
               >
                 Enter
               </button>
             </div>
-
-            {error && (
-              <p className="text-red-500 text-sm mb-2">{error}</p>
-            )}
 
             <a
               href="https://app.ethdenver.com"
@@ -72,13 +42,13 @@ const LoginPage: React.FC = () => {
             </a>
           </div>
 
-            <div className="w-64">
-                <img
-                    src="/unicorn.svg"
-                    alt="Unicorn Ethereum Logo"
-                    className="w-full h-full object-contain"
-                />
-            </div>
+          <div className="w-64">
+            <img
+              src="/unicorn.svg"
+              alt="Unicorn Ethereum Logo"
+              className="w-full h-full object-contain"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-4 gap-4 mb-8">

@@ -30,8 +30,8 @@ function App() {
               <SidebarInset>
                 <div className="flex flex-1 flex-col gap-4 size-full container">
                   <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/" element={<Chat />} />
+                    <Route path="/" element={<Login />} />
+                    <Route path="/chat" element={<Chat />} />
                   </Routes>
                 </div>
               </SidebarInset>
