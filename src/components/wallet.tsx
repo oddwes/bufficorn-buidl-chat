@@ -8,21 +8,27 @@ import {
 import { shortenAddress } from "thirdweb/utils";
 
 const Wallet = () => {
-  const activeAccount = useActiveAccount();
+  const activeAddress = useActiveAccount()?.address;
+
   const client = getThirdwebClient();
   const { data: ensName } = useEnsName({
     client,
-    address: activeAccount?.address,
+    address: activeAddress,
   });
 
-  if (!activeAccount) {
+  if (!activeAddress) {
     return null;
   }
 
   return (
-    <div className="border rounded-lg px-4 py-2 flex items-center">
+    <div
+      className="border rounded-lg px-4 py-2 flex items-center cursor-pointer hover:bg-muted/50"
+      onClick={() => {
+        navigator.clipboard.writeText(activeAddress);
+      }}
+    >
       {ensName || (
-        <AccountProvider address={activeAccount?.address} client={client}>
+        <AccountProvider address={activeAddress} client={client}>
           <AccountAddress className="text-xs" formatFn={shortenAddress} />
         </AccountProvider>
       )}
