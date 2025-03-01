@@ -36,6 +36,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [suggestedPrompts, setSuggestedPrompts] = useState<string[]>([]);
 
   const queryClient = useQueryClient();
 
@@ -54,6 +55,21 @@ export default function Page({ agentId }: { agentId: UUID }) {
 
   useEffect(() => {
     scrollToBottom();
+  }, []);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    // Parse suggested prompts from environment variable
+    const promptsString = import.meta.env.VITE_SUGGESTED_PROMPTS || "";
+    if (promptsString) {
+      // Split by commas and trim whitespace from each prompt
+      setSuggestedPrompts(
+        promptsString.split(",").map((p: string) => p.trim())
+      );
+    }
   }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -106,11 +122,50 @@ export default function Page({ agentId }: { agentId: UUID }) {
     formRef.current?.reset();
   };
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+  const handleSuggestedPrompt = (prompt: string) => {
+    // Create attachments if there's a selected file
+    const attachments: IAttachment[] | undefined = selectedFile
+      ? [
+          {
+            url: URL.createObjectURL(selectedFile),
+            contentType: selectedFile.type,
+            title: selectedFile.name,
+          },
+        ]
+      : undefined;
+
+    // Add messages directly to the query cache
+    const newMessages = [
+      {
+        text: prompt,
+        user: "user",
+        createdAt: Date.now(),
+        attachments,
+      },
+      {
+        text: prompt,
+        user: "system",
+        isLoading: true,
+        createdAt: Date.now(),
+      },
+    ];
+
+    queryClient.setQueryData(
+      ["messages", agentId],
+      (old: ContentWithUser[] = []) => [...old, ...newMessages]
+    );
+
+    // Send the message directly
+    sendMessageMutation.mutate({
+      message: prompt,
+      selectedFile: selectedFile ? selectedFile : null,
+    });
+
+    // Reset state
+    setSelectedFile(null);
+    setInput("");
+    formRef.current?.reset();
+  };
 
   const sendMessageMutation = useMutation({
     mutationKey: ["send_message", agentId],
@@ -157,7 +212,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
       <div className="flex-1 overflow-y-auto">
         <ChatMessageList ref={messagesContainerRef}>
           {transitions((style, message) => (
-            // @ts-ignore
+            // @ts-expect-error animated.div props type mismatch
             <animated.div
               style={style}
               className="flex flex-col gap-1 p-2 sm:gap-2 sm:p-4"
@@ -225,6 +280,26 @@ export default function Page({ agentId }: { agentId: UUID }) {
             </animated.div>
           ))}
         </ChatMessageList>
+      </div>
+      <div className="max-w-3xl w-full mx-auto px-4 pt-4">
+        {suggestedPrompts.length > 0 && (
+          <div className="mb-4">
+            <div className="flex flex-wrap gap-2 items-center justify-center">
+              {suggestedPrompts.map((prompt, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleSuggestedPrompt(prompt)}
+                  className="text-sm"
+                  disabled={sendMessageMutation.isPending}
+                >
+                  {prompt}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <div className="px-4 pb-4 max-w-3xl mx-auto w-full">
         <form
